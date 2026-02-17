@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Міські подорожі — Севілья · Стокгольм · Аннесі · Брюгге</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ============================================
+     CSS VARIABLES & RESET
+     ============================================ */
+  :root {
+    --color-bg: #0f0e0c;
+    --color-bg-warm: #1a1714;
+    --color-text: #e8e2d8;
+    --color-text-muted: #a89f91;
+    --color-accent: #d4a248;
+    --color-accent-warm: #c2703a;
+    --color-divider: rgba(212, 162, 72, 0.2);
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Source Sans 3', 'Segoe UI', sans-serif;
+    --max-width: 1200px;
+    --content-width: 720px;
+  }
+
+  *, *::before, *::after {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ============================================
+     FADE-IN ANIMATION SYSTEM
+     ============================================ */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  .fade-delay-1 { transition-delay: 0.15s; }
+  .fade-delay-2 { transition-delay: 0.3s; }
+  .fade-delay-3 { transition-delay: 0.45s; }
+
+  /* ============================================
+     HERO SECTION
+     ============================================ */
+  .city-hero {
+    position: relative;
+    height: 100vh; min-height: 600px; max-height: 1000px;
+    overflow: hidden;
+  }
+  .city-hero__image {
+    position: absolute; inset: 0; z-index: 1;
+  }
+  .city-hero__image::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(15, 14, 12, 0.2) 0%,
+      rgba(15, 14, 12, 0.1) 40%,
+      rgba(15, 14, 12, 0.6) 75%,
+      rgba(15, 14, 12, 0.95) 100%
+    );
+    z-index: 2;
+  }
+  .city-hero__content {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+    padding: 0 clamp(24px, 5vw, 80px) clamp(48px, 8vh, 100px);
+  }
+  .city-hero__country {
+    font-family: var(--font-body);
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--color-accent); margin-bottom: 16px;
+  }
+  .city-hero__name {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 900; line-height: 0.95;
+    letter-spacing: -0.02em; color: #fff; margin-bottom: 20px;
+  }
+  .city-hero__tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 400; color: var(--color-text-muted);
+    max-width: 500px;
+  }
+
+  /* ============================================
+     CITY INTRO
+     ============================================ */
+  .city-intro {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: clamp(60px, 10vh, 120px) 24px;
+  }
+  .city-intro__text {
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    line-height: 1.85; color: var(--color-text);
+    margin-bottom: 1.5em;
+  }
+  .city-intro__text:last-child { margin-bottom: 0; }
+  .city-intro__text .highlight {
+    color: var(--color-accent); font-weight: 400;
+  }
+
+  /* ============================================
+     MOOD COLLAGE — images only, no captions
+     ============================================ */
+
+  /* ============================================
+     DIVIDER
+     ============================================ */
+  .section-divider {
+    max-width: var(--content-width);
+    margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .section-divider__line {
+    flex: 1; height: 1px; background: var(--color-divider);
+  }
+  .section-divider__label {
+    font-family: var(--font-body);
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--color-accent); white-space: nowrap;
+  }
+
+  /* ============================================
+     LANDMARKS — 40/60 split, image left
+     ============================================ */
+  .landmarks {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: clamp(60px, 10vh, 100px) 24px;
+  }
+  .landmark {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: clamp(40px, 5vw, 80px);
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto clamp(80px, 12vh, 140px);
+  }
+  .landmark:last-child { margin-bottom: 0; }
+
+  .landmark__image-wrapper {
+    position: relative; aspect-ratio: 2 / 3;
+    overflow: hidden; border-radius: 2px;
+  }
+  .landmark__image-wrapper::after {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 2px; pointer-events: none;
+  }
+  .landmark__image-wrapper img { transition: transform 0.8s ease; }
+  .landmark:hover .landmark__image-wrapper img { transform: scale(1.03); }
+
+  .landmark__number {
+    font-family: var(--font-display);
+    font-size: 4rem; font-weight: 900;
+    color: rgba(212, 162, 72, 0.12);
+    line-height: 1; margin-bottom: 12px;
+  }
+  .landmark__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700; color: #fff;
+    line-height: 1.2; margin-bottom: 8px;
+  }
+  .landmark__type {
+    font-family: var(--font-body);
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--color-accent); margin-bottom: 20px;
+  }
+  .landmark__description {
+    font-size: 1.05rem; line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  /* ============================================
+     VERDICT
+     ============================================ */
+  .city-verdict {
+    text-align: center;
+    padding: clamp(80px, 12vh, 140px) 24px;
+    border-top: 1px solid var(--color-divider);
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+  .city-verdict__label {
+    font-family: var(--font-body);
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--color-accent); margin-bottom: 20px;
+  }
+  .city-verdict__text {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-weight: 400; line-height: 1.6; color: var(--color-text);
+  }
+  .city-verdict__text em { color: var(--color-accent); font-style: italic; }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 768px) {
+
+    .landmark { grid-template-columns: 1fr; gap: 32px; }
+    .landmark__image-wrapper { aspect-ratio: 16 / 10; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     HERO — Plaza de España
+     ============================================ -->
+<section class="city-hero">
+  <div class="city-hero__image">
+    <img src="https://images.unsplash.com/photo-1509840841025-9088ba78a826?auto=format&fit=crop&w=1920&q=80"
+         alt="Plaza de España, Севілья">
+  </div>
+  <div class="city-hero__content">
+    <p class="city-hero__country fade-in">Іспанія · Андалусія</p>
+    <h2 class="city-hero__name fade-in fade-delay-1">Севілья</h2>
+    <p class="city-hero__tagline fade-in fade-delay-2">Золото Нового Світу, мавританські палаци, запах апельсинів на кожній вулиці</p>
+  </div>
+</section>
+
+<!-- ============================================
+     INTRO TEXT — Ukrainian, two paragraphs only
+     ============================================ -->
+<div class="city-intro">
+  <p class="city-intro__text fade-in">
+    Щоб зрозуміти Севілью, треба знати одну річ: у XVI столітті це було <span class="highlight">найбагатше місто Європи</span>. Сюди звозили все золото й срібло з Америки — монополія на торгівлю з Новим Світом. Звідси ці божевільні масштаби собору, звідси палаци, збудовані так, ніби їхні власники хотіли когось налякати. А потім річка обміліла, торгівля пішла в Кадіс, і місто наче завмерло. Власне, тому воно й збереглося таким цілісним — не було грошей на «осучаснення».
+  </p>
+  <p class="city-intro__text fade-in">
+    Мавританська спадщина тут не для туристів — це просто частина міста, яка працює вже 800 років. Alcázar і досі королівська резиденція: коли приїжджає король, верхні поверхи закривають. Апельсинові дерева на кожній вулиці — не декорація, їх садили маври заради тіні й запаху. Вузькі провулки — теж не випадковість: тінь і прохолода в сорокаградусну спеку. Восьмисотрічне місто, в якому все досі працює так, як було задумано.
+  </p>
+</div>
+
+<!-- ============================================
+     MOOD COLLAGE — 4 images, no captions
+     ============================================ -->
+
+<!-- ============================================
+     DIVIDER
+     ============================================ -->
+<div class="section-divider fade-in">
+  <div class="section-divider__line"></div>
+  <span class="section-divider__label">5 найцікавіших місць</span>
+  <div class="section-divider__line"></div>
+</div>
+
+<!-- ============================================
+     LANDMARKS — 40/60 split, image left, text right
+     ============================================ -->
+<div class="landmarks">
+
+  <!-- LANDMARK 1: Plaza de España -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://images.pexels.com/photos/16487643/pexels-photo-16487643.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop"
+           alt="Plaza de España, Севілья">
+    </div>
+    <div>
+      <div class="landmark__number">01</div>
+      <h3 class="landmark__name">Plaza de España</h3>
+      <p class="landmark__type">Архітектура · Парк</p>
+      <p class="landmark__description">
+        1929 рік, Ібероамериканська виставка — Севілья намагається довести світу, що вона ще щось значить після століть забуття. І будує напівкруглу площу з 48 керамічними нішами — по одній на кожну провінцію Іспанії, з картами та історичними сценами з плитки. Масштаб божевільний: 50 тисяч квадратних метрів, канал, яким можна плавати на човнику, мости, колонади. Плитку клали десять років. Стоїш посередині — і відчуваєш себе всередині чиєїсь мрії про імперію, якої вже не існує. Це не реконструкція і не стилізація — це останній великий жест міста, яке вирішило нагадати про себе.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 2: Real Alcázar -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://images.pexels.com/photos/31023832/pexels-photo-31023832.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop"
+           alt="Real Alcázar, Севілья">
+    </div>
+    <div>
+      <div class="landmark__number">02</div>
+      <h3 class="landmark__name">Real Alcázar</h3>
+      <p class="landmark__type">Палац · Спадщина ЮНЕСКО</p>
+      <p class="landmark__description">
+        Alcázar — це палімпсест. Його будують із X століття, і кожна епоха залишила свій шар: мавританський, мудехар, готика, ренесанс. Найцікавіша частина — палац Педро І, 1360-ті роки. Християнський король, якому так подобалася мусульманська естетика, що він спеціально привіз майстрів із Гранади. І досі це діюча резиденція — коли приїжджає король Іспанії, верхні поверхи закривають для публіки. Сади — окрема історія: лабіринти з підстрижених кущів, фонтани, павільйони, все в тій же суміші стилів.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 3: La Catedral &amp; La Giralda -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://images.pexels.com/photos/31790896/pexels-photo-31790896.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop"
+           alt="La Giralda, Севілья">
+    </div>
+    <div>
+      <div class="landmark__number">03</div>
+      <h3 class="landmark__name">La Catedral &amp; La Giralda</h3>
+      <p class="landmark__type">Собор · Визначна пам'ятка</p>
+      <p class="landmark__description">
+        1401 рік, міська рада ухвалює рішення: «Збудуємо таку церкву, щоб нащадки вважали нас божевільними». Вдалося. Найбільший готичний собор у світі за об'ємом, на місці колишньої мечеті. Мінарет не зруйнували — перетворили на дзвіницю, La Giralda. Всередині підстелі зникають у темряві, золоті вівтарі, гробниця Колумба (імовірно — ДНК-аналіз так і не дав остаточної відповіді), десятки бічних капел. На дзвіницю ведуть пандуси замість сходів — їх проєктували так, щоб можна було заїхати верхи на коні.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 4: Casa de Pilatos -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://images.pexels.com/photos/18836166/pexels-photo-18836166.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop"
+           alt="Casa de Pilatos, Севілья">
+    </div>
+    <div>
+      <div class="landmark__number">04</div>
+      <h3 class="landmark__name">Casa de Pilatos</h3>
+      <p class="landmark__type">Палац · Архітектура</p>
+      <p class="landmark__description">
+        Палац XVI століття, збудований першим маркізом Таріфи після паломництва до Єрусалиму. Він настільки вразився тим, що побачив, що вирішив відтворити пропорції будинку Понтія Пілата. Серйозно. Взяв ідею, привіз справжні римські статуї з Італії, додав мудехарську плитку, ренесансні деталі — і вийшов один із найдивніших палаців в Іспанії: Святий Дім із античними богами на п'єдесталах і арабськими візерунками на стінах. Туристи сюди майже не доходять — усі йдуть в Алькасар. А тут стоїш сам у центральному дворику, мармурова підлога, фонтан, тиша, і розумієш, що це найкрасивіше місце в місті — просто побудоване людиною, яка не могла пояснити, що саме хоче, і тому зібрала все одразу.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 5: Barrio Santa Cruz -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://images.pexels.com/photos/13378555/pexels-photo-13378555.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop"
+           alt="Barrio Santa Cruz, Севілья">
+    </div>
+    <div>
+      <div class="landmark__number">05</div>
+      <h3 class="landmark__name">Barrio Santa Cruz</h3>
+      <p class="landmark__type">Історичний район · Атмосфера</p>
+      <p class="landmark__description">
+        Колишнє єврейське гетто — після погромів 1391 року квартал спорожнів і заселився заново. Вузькі вулички — не для краси: тінь і можливість оборони були важливіші за проїзд карет. Білі стіни, кований метал на вікнах, плитка під ногами, і за кожними важкими дверима — дворик, якого не видно з вулиці. Вдень тут спека і туристи. Але ввечері, годині о десятій, квартал стає іншим: вікна відкриваються, із двориків тягне жасмином і апельсиновим цвітом, десь грає гітара, хтось розмовляє на балконі. Провулки такі вузькі, що стіни тримають прохолоду навіть після сорокаградусного дня. Найстаріша частина Севільї — і досі найживіша.
+      </p>
+    </div>
+  </article>
+
+</div>
+
+<!-- ============================================
+     VERDICT
+     ============================================ -->
+<div class="city-verdict fade-in">
+  <p class="city-verdict__label">Підсумок</p>
+  <p class="city-verdict__text">
+    Севілья — компактне місто, де все в радіусі пішої прогулянки. Архітектура тут — <em>і є причина приїхати</em>. Мавританські палаци, готичний гігантизм, ренесансні дворики — і все це в радіусі кілометра. Місто з характером і власним ритмом, де історія не за склом музею, а просто навколо — в стінах, у плитці під ногами, в тіні вузьких вулиць. Їжа проста й чесна, вино дешеве, вечори довгі. Місто, в яке легко закохатись.
+  </p>
+</div>
+
+<!-- ████████████████████████████████████████████████
+     STOCKHOLM
+     ████████████████████████████████████████████████ -->
+
+<!-- ============================================
+     HERO — Stockholm
+     ============================================ -->
+<section class="city-hero">
+  <div class="city-hero__image">
+    <img src="https://plus.unsplash.com/premium_photo-1697729828023-35f1eb84db3e?auto=format&fit=crop&w=1920&q=80"
+         alt="Стокгольм, вид з води">
+  </div>
+  <div class="city-hero__content">
+    <p class="city-hero__country fade-in">Швеція · Скандинавія</p>
+    <h2 class="city-hero__name fade-in fade-delay-1">Стокгольм</h2>
+    <p class="city-hero__tagline fade-in fade-delay-2">14 островів між озером і морем, гранітні набережні, світло, яке не зникає до півночі</p>
+  </div>
+</section>
+
+<!-- ============================================
+     INTRO TEXT — Stockholm
+     ============================================ -->
+<div class="city-intro">
+  <p class="city-intro__text fade-in">
+    Стокгольм стоїть на чотирнадцяти островах між озером Меларен і Балтійським морем. Третина площі — вода. <span class="highlight">Кожен острів має свій характер</span>: Гамла Стан — середньовіччя, Седермальм — колишній робітничий район із кав'ярнями, Юргорден — парки й музеї. У XVII столітті Швеція раптом стала імперією і перебудувала столицю з дерев'яного містечка в щось із палацами на набережній. Після Полтави імперія впала, але місто вже стояло — з палацами, набережними і шириною вулиць, яких вистачило на наступні три століття.
+  </p>
+  <p class="city-intro__text fade-in">
+    Але головне в Стокгольмі — не історія, а підхід до простору. Шведська ідея: все має бути красивим, але без надмірності. Функціональним, але з теплом. Ратуша в стилі національного романтизму, бібліотека Асплунда в модерністському мінімалізмі, станції метро як підземні печери з мистецтвом на стінах. Місто, яке інвестувало в те, щоб навіть публічна інфраструктура була гарною — і це відчувається на кожному кроці.
+  </p>
+</div>
+
+<!-- ============================================
+     MOOD COLLAGE — Stockholm, 4 images, no captions
+     ============================================ -->
+
+<!-- ============================================
+     DIVIDER — Stockholm
+     ============================================ -->
+<div class="section-divider fade-in">
+  <div class="section-divider__line"></div>
+  <span class="section-divider__label">5 найцікавіших місць</span>
+  <div class="section-divider__line"></div>
+</div>
+
+<!-- ============================================
+     LANDMARKS — Stockholm
+     ============================================ -->
+<div class="landmarks">
+
+  <!-- LANDMARK 1: Stadshuset -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=01+-+Stadshuset"
+           alt="Stadshuset, Стокгольм">
+    </div>
+    <div>
+      <div class="landmark__number">01</div>
+      <h3 class="landmark__name">Stadshuset</h3>
+      <p class="landmark__type">Архітектура · Символ міста</p>
+      <p class="landmark__description">
+        1911–1923, архітектор Рагнар Естберг, вісім мільйонів червоних цеглин. Національний романтизм — стиль, яким Швеція на початку XX століття шукала власну архітектурну мову між ренесансом і модерном. На вежі — три золоті корони, національний символ, кожна діаметром 2,2 метри (знизу здаються маленькими). Блакитна зала, де щороку проходить нобелівський бенкет, насправді червона — Естберг планував пофарбувати стіни в блакитне, але закохався в текстуру сирої цегли й передумав. Золота зала: 18 мільйонів золотих мозаїчних плиточок із сюжетами шведської історії, а в центрі — богиня озера Меларен тримає Стокгольм на колінах.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 2: Gamla Stan -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=02+-+Gamla+Stan"
+           alt="Gamla Stan, Стокгольм">
+    </div>
+    <div>
+      <div class="landmark__number">02</div>
+      <h3 class="landmark__name">Gamla Stan</h3>
+      <p class="landmark__type">Історичний район · Середньовіччя</p>
+      <p class="landmark__description">
+        Острів Стадсгольмен, місце, де Стокгольм народився в 1252 році. Середньовічне планування вулиць збереглося повністю — жодна бомба сюди не впала. Фасади XVII–XVIII століть у теплих червоних, жовтих, помаранчевих тонах — кольори, привезені шведськими архітекторами з подорожей Європою. Площа Сторторгет — найгарніша в місті і найкривавіша: тут у 1520 році данський король Крістіан II стратив вісімдесят шведських дворян (Стокгольмська кривава баня). Якщо придивитися до стін, можна знайти вікінґські рунічні камені, вмуровані в кладку XVI століття — будівельники просто використали те, що лежало під ногами.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 3: Stadsbiblioteket -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=03+-+Stadsbiblioteket"
+           alt="Stadsbiblioteket, Стокгольм">
+    </div>
+    <div>
+      <div class="landmark__number">03</div>
+      <h3 class="landmark__name">Stadsbiblioteket</h3>
+      <p class="landmark__type">Архітектура · Модернізм</p>
+      <p class="landmark__description">
+        Ґуннар Асплунд, 1928 рік. Циліндр, що виростає з прямокутної основи — геометрія, доведена до абсолюту. Ротонда висотою 24 метри. Спочатку Асплунд проєктував купол, але відмовився на користь відкритого циліндра — і вийшов один із найвпливовіших бібліотечних інтер'єрів у світі. Стіни обставлені книжковими полицями на три яруси — десь між амфітеатром і бджолиними стільниками. Але найкраще Асплунд зробив із підходу: вулиця, портал, вузькі сходи вгору — і раптом стіни розступаються у вибух простору ротунди зі світлом зверху. Це перша бібліотека у Швеції з відкритими полицями — до неї книги видавали лише через бібліотекаря. Асплунд дав людям не просто доступ до книжок, а простір, гідний того, що в них написано.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 4: Tunnelbanan -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=04+-+Tunnelbanan+metro+art"
+           alt="Tunnelbanan, Стокгольм">
+    </div>
+    <div>
+      <div class="landmark__number">04</div>
+      <h3 class="landmark__name">Tunnelbanan</h3>
+      <p class="landmark__type">Мистецтво · Інфраструктура</p>
+      <p class="landmark__description">
+        Сто станцій, дев'яносто з них — із мистецтвом на стінах. Із 1957 року 150 художників перетворюють стокгольмське метро на те, що називають найдовшою художньою галереєю світу — 110 кілометрів. Станції синьої лінії вирубані прямо в скелі, і це видно: сирий граніт лишили відкритим навмисно. T-Centralen — блакитні ліани й колоски на білому тлі, робота Пера Улофа Ультведта. Kungsträdgården — червоно-зелений грот зі скульптурами, врятованими зі зруйнованих стокгольмських будівель, і власним видом печерного павука, який не живе більше ніде. Rådhuset — охристі стіни і масивні колони, схожі на давній храм під ратушею.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 5: Skogskyrkogården -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=05+-+Skogskyrkogarden"
+           alt="Skogskyrkogården, Стокгольм">
+    </div>
+    <div>
+      <div class="landmark__number">05</div>
+      <h3 class="landmark__name">Skogskyrkogården</h3>
+      <p class="landmark__type">Ландшафт · Спадщина ЮНЕСКО</p>
+      <p class="landmark__description">
+        1915 рік, конкурс на проєкт нового цвинтаря. Перемагають двоє тридцятирічних — Ґуннар Асплунд і Сіґурд Левер&#x2060;енц із проєктом «Таллум». Вони єдині зі всіх учасників, хто вирішив не перетворювати ділянку на англійський парк, а залишити сосновий ліс домінантою. Могили вільно розкидані серед дерев. П'ять капел, кожна підпорядкована ландшафту, а не навпаки — від маленької Лісової капели 1920 року до крематорію з капелами Віри, Надії та Святого Хреста, останньої роботи Асплунда (1940, він помер того ж року, похований тут же). Гранітний хрест на галявині, натхненний картиною Каспара Давіда Фрідріха. 108 гектарів тиші. Те, як Швеція ставиться до смерті — без пафосу, з повагою до природи.
+      </p>
+    </div>
+  </article>
+
+</div>
+
+<!-- ============================================
+     VERDICT — Stockholm
+     ============================================ -->
+<div class="city-verdict fade-in">
+  <p class="city-verdict__label">Підсумок</p>
+  <p class="city-verdict__text">
+    Стокгольм — це архітектура, розчинена у воді. Куди не глянь — небо, острів, міст, відображення у воді. <em>Нордична стриманість</em> — речі красиві тому, що хтось довго про них думав, а не тому, що витратив найбільше грошей. Місто, де станції метро — це галереї, публічна бібліотека — модерністський храм, а цвинтар — об'єкт ЮНЕСКО. Чисте повітря, граніт під ногами, і влітку світло, яке так і не зникає. Місто, яке не намагається вразити — воно просто таке є.
+  </p>
+</div>
+
+<!-- ████████████████████████████████████████████████
+     ANNECY
+     ████████████████████████████████████████████████ -->
+
+<!-- ============================================
+     HERO — Annecy
+     ============================================ -->
+<section class="city-hero">
+  <div class="city-hero__image">
+    <img src="https://images.unsplash.com/photo-1590274853751-8fb10591d007?auto=format&fit=crop&w=1920&q=80"
+         alt="Аннесі, озеро і гори">
+  </div>
+  <div class="city-hero__content">
+    <p class="city-hero__country fade-in">Франція · Верхня Савойя</p>
+    <h2 class="city-hero__name fade-in fade-delay-1">Аннесі</h2>
+    <p class="city-hero__tagline fade-in fade-delay-2">Альпійське озеро кольору бірюзи, кам'яні канали і савойське містечко, від якого не хочеться їхати</p>
+  </div>
+</section>
+
+<!-- ============================================
+     INTRO TEXT — Annecy
+     ============================================ -->
+<div class="city-intro">
+  <p class="city-intro__text fade-in">
+    Аннесі — не столиця і ніколи нею не було. Це <span class="highlight">маленьке савойське містечко</span> на 50 тисяч жителів, затиснуте між озером і горою Семноз. Графи Женевські тримали тут замок із XIII століття, потім прийшли герцоги Савойські, потім Сардинське королівство, і тільки в 1860 році Аннесі стало французьким — Наполеон III отримав Савойю в обмін на допомогу в об'єднанні Італії. А коли Женева стала протестантською, сюди переїхав єпископ, і містечко на п'ять тисяч жителів раптом опинилося з тринадцятьма монастирями — «Альпійський Рим». Ця історія не написана на фасадах великими літерами. Вона просто є — в каменях, в пропорціях вулиць, у тому, що архітектура тут п'ємонтська, а не паризька.
+  </p>
+  <p class="city-intro__text fade-in">
+    Але їдуть сюди не через історію. Їдуть, бо навколо озера — савойські села, кожне зі своїм ринком і своїм видом на гори. Велодоріжка вздовж берега між вишневими садами й виноградниками. Катер, що зупиняється в кожному селі. Ранковий ринок у старому місті з місцевими сирами, ковбасами і савойським вином, про яке за межами регіону ніхто не чув. Місто, де не треба складати маршрут — достатньо просто вийти з готелю.
+  </p>
+</div>
+
+<!-- ============================================
+     MOOD COLLAGE — Annecy, 4 images, no captions
+     ============================================ -->
+
+<!-- ============================================
+     DIVIDER — Annecy
+     ============================================ -->
+<div class="section-divider fade-in">
+  <div class="section-divider__line"></div>
+  <span class="section-divider__label">5 найцікавіших місць</span>
+  <div class="section-divider__line"></div>
+</div>
+
+<!-- ============================================
+     LANDMARKS — Annecy
+     ============================================ -->
+<div class="landmarks">
+
+  <!-- LANDMARK 1: Lac d'Annecy -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=01+-+Lac+d+Annecy"
+           alt="Lac d'Annecy">
+    </div>
+    <div>
+      <div class="landmark__number">01</div>
+      <h3 class="landmark__name">Lac d'Annecy</h3>
+      <p class="landmark__type">Природа · Озеро</p>
+      <p class="landmark__description">
+        Перше, що бачиш — колір. Вода такого відтінку бірюзи, якого не очікуєш від Альп, швидше від Карибів. Озеро завдовжки 14 кілометрів, глибиною до 82 метрів, утворене льодовиком 18 тисяч років тому. Прозорість — не випадковість: до 1950-х озеро було забрудненим, поки вісім комун не створили SILA і не побудували 47 кілометрів колектора навколо всього берега — перший такий проєкт у Франції. Сьогодні вода оновлюється кожні чотири роки через 47 підземних джерел, моторні човни заборонені з 1976-го. Звідси колір. На озеро виходиш із-за рогу старого міста — і далі воно з тобою весь час: з набережної, з мосту, з-за кожної вулиці.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 2: Les Canaux du Thiou -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=02+-+Canaux+du+Thiou"
+           alt="Канали Тіу, Аннесі">
+    </div>
+    <div>
+      <div class="landmark__number">02</div>
+      <h3 class="landmark__name">Les Canaux du Thiou</h3>
+      <p class="landmark__type">Канали · Атмосфера</p>
+      <p class="landmark__description">
+        Тіу — одна з найкоротших річок Франції: три з половиною кілометри від озера до злиття з Ф'є. Але вона тримає на собі все старе місто. Вода виходить з озера, розгалужується на канали — Canal du Vassé, Canal du Thiou, Canal Saint-Dominique — і тече між фасадами кольору лимону, фісташки, лосося. У Середньовіччі тут стояли водяні колеса, млини, ремісничі майстерні. Зараз — ресторани з терасами над водою, човники, качки. Головна якість каналів — масштаб: вони вузькі, вода близько, будинки нависають, все на відстані витягнутої руки. Сідаєш на кам'яний парапет, опускаєш ноги, і вода тече під тобою.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 3: Vieille Ville -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=03+-+Vieille+Ville"
+           alt="Vieille Ville, Аннесі">
+    </div>
+    <div>
+      <div class="landmark__number">03</div>
+      <h3 class="landmark__name">Vieille Ville</h3>
+      <p class="landmark__type">Історичний район · Архітектура</p>
+      <p class="landmark__description">
+        Старе місто Аннесі — це камінь. Вузькі вулиці, перекриті аркадами Rue Sainte-Claire — їх збудували в XVI–XVII століттях, коли герцог Савойський наказав замінити дерев'яні будинки на кам'яні після серії пожеж. Palais de l'Île — фортеця XII століття на скелястому острівці посеред Тіу, яка встигла побувати в'язницею, судом, монетним двором і архівом, — тепер головна листівка міста, кам'яний корабель, що розрізає річку надвоє. За рогом — Hôtel de Sales із чотирма статуями, що зображують пори року. Далі — собор Сен-П'єр, де молодий Руссо вчився музики й зустрів Мадам де Варан. Все це в радіусі десяти хвилин пішки. Аннесі — місто, де заблукати фізично неможливо, але щоразу знаходиш щось нове.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 4: Château d'Annecy -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=04+-+Chateau+d+Annecy"
+           alt="Château d'Annecy">
+    </div>
+    <div>
+      <div class="landmark__number">04</div>
+      <h3 class="landmark__name">Château d'Annecy</h3>
+      <p class="landmark__type">Замок · Панорама</p>
+      <p class="landmark__description">
+        Замок стоїть на пагорбі над старим містом — його вежі видно з будь-якої вулиці внизу. Графи Женевські будували його з XII століття, герцоги Женевуа-Немур добудовували до XVI. Вежа Королеви — найстаріша частина, стіни чотири метри завтовшки. Потім замок горів, занепадав, став казармами і простояв так до 1947 року. Місто викупило його в 1953-му й перетворило на музей. Але експозиція — не головне. Головне — підйом: круті вулички від каналів угору, брукований серпантин між будинками, і раптом — відкрита тераса з видом на всі дахи старого міста, канали, озеро і гори за ним. Один із тих видів, заради яких дістаєш телефон, а потім ховаєш назад, бо фото не передає.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 5: Pont des Amours & Jardins de l'Europe -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=05+-+Pont+des+Amours"
+           alt="Pont des Amours, Аннесі">
+    </div>
+    <div>
+      <div class="landmark__number">05</div>
+      <h3 class="landmark__name">Pont des Amours</h3>
+      <p class="landmark__type">Міст · Парк · Набережна</p>
+      <p class="landmark__description">
+        Залізний місток 1907 року — точка, де старе місто закінчується і починається озеро. З одного боку — Canal du Vassé, човники під навісом платанів, тиша і зелене світло крізь листя. З іншого — озеро, гори, простір, повітря. Jardins de l'Europe по сусідству — парк, закладений за сардинської доби, коли Аннесі ще не було Францією: алеї вікових дерев, лавки над водою, велике поле Le Pâquier, де місцеві лежать на траві з вином і сиром. Це місце, де змінюється ритм: вулиці звужуються — і раптом розчиняються у воді й небі. Містка, з якого нікуди не треба йти. Можна просто стояти.
+      </p>
+    </div>
+  </article>
+
+</div>
+
+<!-- ============================================
+     VERDICT — Annecy
+     ============================================ -->
+<div class="city-verdict fade-in">
+  <p class="city-verdict__label">Підсумок</p>
+  <p class="city-verdict__text">
+    Аннесі — це озеро, яке змінює колір п'ять разів на день, канали з водою, в якій видно дно, гори, які просто стоять навколо, і старе місто з пропорціями, в яких людині добре. Місто, де <em>найкраще, що можна зробити — це нічого</em>. Сісти, дивитись на воду, з'їсти шматок реблошону, пройтися ще раз тим самим мостом. Чисте повітря, чиста вода, тиша і відчуття, що поспішати нема куди.
+  </p>
+</div>
+
+<!-- ████████████████████████████████████████████████
+     BRUGES / БРЮГГЕ
+     ████████████████████████████████████████████████ -->
+
+<!-- ============================================
+     HERO — Bruges
+     ============================================ -->
+<section class="city-hero">
+  <div class="city-hero__image">
+    <img src="https://images.unsplash.com/photo-1618833439630-09f43f0f57cb?auto=format&fit=crop&w=1920&q=80"
+         alt="Брюгге, канали і дзвіниця">
+  </div>
+  <div class="city-hero__content">
+    <p class="city-hero__country fade-in">Бельгія · Західна Фландрія</p>
+    <h2 class="city-hero__name fade-in fade-delay-1">Брюгге</h2>
+    <p class="city-hero__tagline fade-in fade-delay-2">Середньовічне місто, яке врятувала бідність — канали, цегла, дзвони і тиша п'яти століть</p>
+  </div>
+</section>
+
+<!-- ============================================
+     INTRO TEXT — Bruges
+     ============================================ -->
+<div class="city-intro">
+  <p class="city-intro__text fade-in">
+    У 1134 році шторм розірвав фламандське узбережжя і створив Звін — припливну затоку, що з'єднала Брюгге з морем. За два століття місто стало <span class="highlight">перехрестям, де сходився весь світ</span>: ганзейські купці, генуезькі банкіри, англійська вовна, іспанські вина, балтійське хутро — все тут. Населення — 45 тисяч, порівнянно з тогочасним Лондоном. А потім Звін почав замулюватися. Повільно, невідворотно — пісок заповнював канал, великі кораблі вже не могли дістатися порту. До 1500-го навіть малі судна ледве проходили. Купці пішли в Антверпен, Ганзейська контора перебралася 1520-го. До середини XIX століття Брюгге було найбіднішим містом Бельгії.
+  </p>
+  <p class="city-intro__text fade-in">
+    І саме ця бідність його врятувала. Не було грошей зносити старе й будувати нове — і середньовічне місто просто лишилося стояти. Цегла, ступінчасті фронтони, канали, дзвіниця — все на місці, бо нікому не було діла. У 1892-му символіст Жорж Роденбах написав роман «Мертве Брюгге» — першу в історії книжку з фотоілюстраціями — і зробив із занепаду естетику: <em>«Брюгге було його мертвою дружиною. А його мертва дружина була Брюгге»</em>. Іронія в тому, що книжка, яка оспівала смерть міста, запустила його воскресіння. Туристи поїхали дивитися на «мертве місто» — і дивляться досі. Чотири об'єкти ЮНЕСКО. Вісім мільйонів відвідувачів на рік. Місто, яке має дякувати піску, що забив його гавань п'ятсот років тому.
+  </p>
+</div>
+
+<!-- ============================================
+     DIVIDER — Bruges
+     ============================================ -->
+<div class="section-divider fade-in">
+  <div class="section-divider__line"></div>
+  <span class="section-divider__label">5 найцікавіших місць</span>
+  <div class="section-divider__line"></div>
+</div>
+
+<!-- ============================================
+     LANDMARKS — Bruges
+     ============================================ -->
+<div class="landmarks">
+
+  <!-- LANDMARK 1: Belfort -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=01+-+Belfort"
+           alt="Белфорт, дзвіниця Брюгге">
+    </div>
+    <div>
+      <div class="landmark__number">01</div>
+      <h3 class="landmark__name">Belfort</h3>
+      <p class="landmark__type">Дзвіниця · Спадщина ЮНЕСКО</p>
+      <p class="landmark__description">
+        83 метри, 366 сходинок, і вежа, яку так і не добудували. Шпиль горів двічі — після другого разу махнули рукою. Тому той зрізаний силует із листівок — не задум, а втома від катастроф. Посередині підйому — скарбниця: десять замків, десять ключів у десятьох різних городян, жодна людина не могла відкрити двері сама. Нагорі — 47 дзвонів і механічний барабан на 30 тисяч штифтів, що грає мелодію кожні п'ятнадцять хвилин. Мелодію міняють раз на два роки — переставити штифти швидше фізично неможливо. Дзвони чути скрізь у місті, і це перше, що ти запам'ятаєш.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 2: Basiliek van het Heilig Bloed -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=02+-+Heilig+Bloed"
+           alt="Базиліка Святої Крові, Брюгге">
+    </div>
+    <div>
+      <div class="landmark__number">02</div>
+      <h3 class="landmark__name">Basiliek van het Heilig Bloed</h3>
+      <p class="landmark__type">Базиліка · Реліквія</p>
+      <p class="landmark__description">
+        Дві церкви, складені одна на одну. Внизу — романська каплиця, темний камінь, масивні колони, тиша підземелля, майже нічого не змінилося за дев'ятсот років. Нагорі — готика, позолота, фрески, і кришталева ампула з тканиною, на якій нібито кров Христа. Привезли з хрестових походів — або з пограбованого Константинополя, залежно від того, кого питаєш. Кров нібито ставала рідкою щоп'ятниці, потім перестала — і більше ніколи. Реліквію показують щодня о другій. А на Вознесіння — процесія: 1700 учасників, 35 тисяч глядачів, без перерви з XIII століття. Наступна — 14 травня 2026-го.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 3: Onze-Lieve-Vrouwekerk + Michelangelo -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=03+-+Michelangelo"
+           alt="Мікеланджело, Мадонна з немовлям, Брюгге">
+    </div>
+    <div>
+      <div class="landmark__number">03</div>
+      <h3 class="landmark__name">Onze-Lieve-Vrouwekerk</h3>
+      <p class="landmark__type">Церква · Скульптура Мікеланджело</p>
+      <p class="landmark__description">
+        Цегляна вежа 115 метрів — друга за висотою цегляна вежа у світі. Але всередині — річ, яка не має жодного стосунку до Фландрії. Мармурова «Мадонна з немовлям» Мікеланджело — єдина його скульптура, що покинула Італію за його життя. Купили фламандські суконні торговці за сто дукатів. Крали двічі: французи вивезли до Парижу, повернули після Ватерлоо; нацисти сховали в соляній шахті, звідки її дістали «Мисливці за скарбами». А сама Мадонна — дивна: не дивиться на дитину, не тримає її. Ісус стоїть сам, наче робить крок убік. Мати, яка знає, що буде далі, — і не може зупинити.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 4: Begijnhof -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=04+-+Begijnhof"
+           alt="Бегінаж, Брюгге">
+    </div>
+    <div>
+      <div class="landmark__number">04</div>
+      <h3 class="landmark__name">Begijnhof</h3>
+      <p class="landmark__type">Бегінаж · Спадщина ЮНЕСКО</p>
+      <p class="landmark__description">
+        Середньовічна жіноча комуна. Білі будинки навколо зеленого подвір'я, ворота, що зачиняються на ніч. Бегінки — не черниці: давали обітниці целібату й послуху, але не назавжди. Могли піти будь-коли. Самі заробляли, самі керували. Папа оголосив їх єретичками — вони продовжили. Остання бегінка у світі померла 2013 року. Зараз у Брюгге лишилося четверо бенедиктинських черниць — усі швейцарського походження — і тридцять незаміжніх жінок. Ворота й досі зачиняються в сутінках. Навесні подвір'я вкривають нарциси. Найтихіше місце в центрі — і вісім століть поспіль тут живуть тільки жінки.
+      </p>
+    </div>
+  </article>
+
+  <!-- LANDMARK 5: Rozenhoedkaai -->
+  <article class="landmark fade-in">
+    <div class="landmark__image-wrapper">
+      <img src="https://placehold.co/900x1100/1a1a2e/555?text=05+-+Rozenhoedkaai"
+           alt="Розенгудкай, Брюгге">
+    </div>
+    <div>
+      <div class="landmark__number">05</div>
+      <h3 class="landmark__name">Rozenhoedkaai</h3>
+      <p class="landmark__type">Набережна · Канали · Вигляд</p>
+      <p class="landmark__description">
+        Не будівля — точка зору. Місце, де канали Дайвер і Ґруненрей зливаються, і відкривається той кадр, який є на кожній листівці: вода, верба, ступінчасті фасади, Белфорт на тлі. У Середньовіччі тут розвантажували сіль, потім продавали четки — звідси назва, «Набережна чоток». Сьогодні це найфотографованіше місце Брюгге. Але справа не у фото. Стоїш на кам'яному парапеті, дивишся на воду, в якій відбивається все, що збудували п'ятсот років тому, — і розумієш: місто вижило не тому, що хтось його зберігав, а тому, що всім було не до нього.
+      </p>
+    </div>
+  </article>
+
+</div>
+
+<!-- ============================================
+     VERDICT — Bruges
+     ============================================ -->
+<div class="city-verdict fade-in">
+  <p class="city-verdict__label">Підсумок</p>
+  <p class="city-verdict__text">
+    Брюгге — це місто, яке не мало б існувати. Пісок забив гавань, гроші пішли, п'ять століть ніхто нічого не будував — і саме тому середньовічна цегла, канали й дзвони на місці. Під бруківкою тече <em>пивопровід на три кілометри</em> — бо остання пивоварня не хотіла ганяти вантажівки через ЮНЕСКО-центр. На каналах плавають лебеді — за переказом, прокляття: 1488-го городяни стратили радника імператора Максиміліана на прізвисько Довга Шия, і імператор наказав тримати «довгих шиїв» на воді навічно. Місто темної цегли, дзвонів кожні п'ятнадцять хвилин, шоколаду, пива й тиші. Найкраще збережене середньовічне місто Європи — бо в нього не було іншого виходу.
+  </p>
+</div>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+
+<!-- ============================================
+     SCROLL FADE-IN
+     ============================================ -->
+<script>
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+})();
+</script>
+
+</body>
+</html>
